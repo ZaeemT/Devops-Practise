@@ -1,6 +1,6 @@
-name = Practise
+name: Practise
 
-run-name = ${{github.actor}} iniating workflow.
+run-name: ${{github.actor}} iniating workflow.
 
 on:
   push:
@@ -35,8 +35,18 @@ jobs:
           switches: -avzr --delete
           path: src/
           remote_path: /home/ubuntu
-          remote_host: example.com
+          remote_host: 34.201.250.223
           remote_user: ubuntu
           remote_key: ${{ secrets.DEPLOY_KEY }}
-
-  
+      
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.1
+        with:
+          host: 34.201.250.223
+          username: ubuntu
+          key: ${{ secrets.DEPLOY_KEY }}
+          port: 22
+          script: |
+            docker build -t nodeapp .
+            docker compose down
+            docker compose up
